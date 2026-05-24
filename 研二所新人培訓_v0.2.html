@@ -1,0 +1,1051 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>研二所｜新人培訓</title>
+<style>
+:root{
+  /* ── 水域型光電儀表板配色 ── */
+  --bg:#f5f6f8; --card:#ffffff; --card-2:#fafbfc;
+  --ink:#1f2937; --ink-mid:#4b5563; --ink-light:#6b7280; --ink-faint:#9ca3af;
+  --border:#e5e7eb; --border-mid:#d1d5db;
+  --orange:#ea580c; --orange-deep:#c2410c; --orange-bg:#fff7ed; --orange-border:#fed7aa;
+  --green:#16a34a; --green-deep:#15803d; --green-bg:#f0fdf4; --green-border:#bbf7d0;
+  --purple:#6d5ce0; --purple-bg:#f3f1fd;
+  --blue:#2563eb; --blue-bg:#eff6ff;
+  --red:#dc2626; --red-bg:#fef2f2;
+  /* 三階段色（沿用儀表板語彙）*/
+  --s1:#ea580c; --s1-bg:#fff7ed; --s1-border:#fed7aa;
+  --s2:#16a34a; --s2-bg:#f0fdf4; --s2-border:#bbf7d0;
+  --s3:#2563eb; --s3-bg:#eff6ff; --s3-border:#bfdbfe;
+  --nav-h:60px;
+  --font:'Microsoft JhengHei','微軟正黑體','PingFang TC','Noto Sans TC',-apple-system,BlinkMacSystemFont,sans-serif;
+  --mono:'SF Mono','Roboto Mono','Microsoft JhengHei',monospace;
+}
+*{box-sizing:border-box; margin:0; padding:0; -webkit-tap-highlight-color:transparent;}
+html{font-size:15px;}
+body{
+  font-family:var(--font); background:var(--bg); color:var(--ink);
+  line-height:1.65; font-weight:400; padding-bottom:var(--nav-h);
+  max-width:520px; margin:0 auto; position:relative; min-height:100vh;
+  overscroll-behavior-y:contain; -webkit-font-smoothing:antialiased;
+}
+.mono{font-family:var(--mono);}
+
+/* ── TOP BAR ── */
+.topbar{
+  position:sticky; top:0; z-index:50; background:var(--card); color:var(--ink);
+  padding:0.75rem 1.1rem; display:flex; align-items:center; gap:0.7rem;
+  border-bottom:1px solid var(--border);
+}
+.topbar .logo-circ{
+  width:36px; height:36px; border-radius:9px; flex-shrink:0;
+  background:linear-gradient(135deg,var(--orange),var(--green));
+  display:flex; align-items:center; justify-content:center;
+  font-weight:700; color:#fff; font-size:1rem;
+}
+.topbar-titles{flex:1; min-width:0;}
+.topbar-eyebrow{font-family:var(--mono); font-size:0.56rem; letter-spacing:0.14em; color:var(--ink-faint); text-transform:uppercase;}
+.topbar-title{font-size:1.02rem; font-weight:700; letter-spacing:0.01em; line-height:1.2; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;}
+
+/* ── VIEW ── */
+.view{display:none; animation:fade 0.28s ease;}
+.view.active{display:block;}
+@keyframes fade{from{opacity:0; transform:translateY(6px);} to{opacity:1; transform:translateY(0);}}
+.scroll-area{padding:1.1rem 1.1rem 2rem;}
+
+/* ── SHARED ── */
+.section-head{display:flex; align-items:center; gap:0.6rem; margin:1.7rem 0 0.9rem;}
+.section-head:first-child{margin-top:0.2rem;}
+.section-bar{width:4px; height:18px; border-radius:2px; background:var(--orange);}
+.section-bar.g{background:var(--green);} .section-bar.b{background:var(--blue);} .section-bar.p{background:var(--purple);}
+.section-title{font-size:1.05rem; font-weight:700; color:var(--ink); letter-spacing:0.01em;}
+.section-note{font-size:0.7rem; color:var(--ink-light); margin-left:auto;}
+.card{background:var(--card); border:1px solid var(--border); border-radius:12px; margin-bottom:0.9rem; overflow:hidden; box-shadow:0 1px 2px rgba(0,0,0,0.03);}
+.muted{color:var(--ink-light);}
+.pill{display:inline-block; font-family:var(--mono); font-size:0.6rem; letter-spacing:0.04em; padding:0.14rem 0.5rem; border-radius:20px; vertical-align:middle; font-weight:500;}
+.pill.s1{background:var(--s1-bg); color:var(--s1); border:1px solid var(--s1-border);}
+.pill.s2{background:var(--s2-bg); color:var(--s2); border:1px solid var(--s2-border);}
+.pill.s3{background:var(--s3-bg); color:var(--s3); border:1px solid var(--s3-border);}
+
+/* ── HERO ── */
+.hero{background:var(--card); padding:1.6rem 1.2rem; border-bottom:1px solid var(--border); position:relative; overflow:hidden;}
+.hero::after{content:''; position:absolute; top:0; right:0; width:120px; height:120px; background:radial-gradient(circle at top right,rgba(234,88,12,0.08),transparent 70%);}
+.hero-eyebrow{font-family:var(--mono); font-size:0.62rem; letter-spacing:0.12em; color:var(--ink-faint); text-transform:uppercase; margin-bottom:0.7rem;}
+.hero-title{font-size:1.5rem; font-weight:800; line-height:1.3; margin-bottom:0.7rem; position:relative; letter-spacing:0.01em;}
+.hero-title .accent{background:linear-gradient(120deg,var(--orange),var(--green)); -webkit-background-clip:text; background-clip:text; -webkit-text-fill-color:transparent;}
+.hero-sub{font-size:0.92rem; color:var(--ink-mid); position:relative; line-height:1.6;}
+
+/* ── STATS STRIP ── */
+.stat-strip{display:grid; grid-template-columns:repeat(3,1fr); gap:0.6rem; padding:1rem 1.1rem; background:var(--bg);}
+.stat{background:var(--card); border:1px solid var(--border); border-radius:10px; padding:0.8rem 0.6rem; text-align:center; cursor:pointer; transition:transform 0.15s;}
+.stat:active{transform:scale(0.97);}
+.stat .stat-num{font-family:var(--mono); font-size:1.7rem; font-weight:700; line-height:1;}
+.stat.c1 .stat-num{color:var(--s1);} .stat.c2 .stat-num{color:var(--s2);} .stat.c3 .stat-num{color:var(--s3);}
+.stat .stat-label{font-size:0.64rem; color:var(--ink-light); margin-top:0.35rem; font-weight:500;}
+.stat .stat-day{font-family:var(--mono); font-size:0.56rem; color:var(--ink-faint); margin-top:0.15rem;}
+
+/* ── QUICK CARDS ── */
+.quick-list{display:flex; flex-direction:column; gap:0.7rem;}
+.quick-card{background:var(--card); border:1px solid var(--border); border-radius:12px; padding:1rem; cursor:pointer; transition:transform 0.15s,box-shadow 0.15s; position:relative; display:flex; align-items:center; gap:0.9rem; box-shadow:0 1px 2px rgba(0,0,0,0.03);}
+.quick-card:active{transform:scale(0.99);}
+.quick-card .qc-icon{width:42px; height:42px; border-radius:10px; display:flex; align-items:center; justify-content:center; font-size:1.3rem; flex-shrink:0;}
+.qc-icon.i1{background:var(--orange-bg);} .qc-icon.i2{background:var(--green-bg);} .qc-icon.i3{background:var(--blue-bg);} .qc-icon.i4{background:var(--purple-bg);}
+.quick-card .qc-body{flex:1; min-width:0;}
+.quick-card .qc-title{font-weight:700; font-size:0.96rem; margin-bottom:0.15rem;}
+.quick-card .qc-desc{font-size:0.72rem; color:var(--ink-light); line-height:1.45;}
+.quick-card .qc-arrow{color:var(--ink-faint); font-size:1.1rem; flex-shrink:0;}
+
+/* ── INFO CARDS ── */
+.info-card{padding:1rem 1.1rem;}
+.info-card .ic-row{font-size:0.82rem; line-height:1.95;}
+.info-card .ic-label{display:inline-block; min-width:5.5em; color:var(--ink-light); font-size:0.75rem;}
+.kvbox{padding:0.9rem 1.1rem;}
+.kvbox .kv-title{font-size:0.66rem; letter-spacing:0.04em; color:var(--ink-faint); margin-bottom:0.4rem; font-family:var(--mono); text-transform:uppercase;}
+.kvbox .kv-body{font-size:0.8rem; line-height:1.9;}
+
+/* ── TASKS ── */
+.phase-tabs{display:flex; gap:0.4rem; margin-bottom:1rem; position:sticky; top:calc(0px); z-index:5; background:var(--bg); padding:0.5rem 0;}
+.pt{flex:1; text-align:center; padding:0.6rem 0.3rem; border:1px solid var(--border); border-radius:9px; cursor:pointer; background:var(--card); transition:all 0.18s;}
+.pt .pt-day{font-family:var(--mono); font-size:0.92rem; font-weight:700; line-height:1;}
+.pt .pt-name{font-size:0.62rem; color:var(--ink-light); margin-top:0.2rem;}
+.pt.active.a1{background:var(--s1); border-color:var(--s1);} .pt.active.a2{background:var(--s2); border-color:var(--s2);} .pt.active.a3{background:var(--s3); border-color:var(--s3);}
+.pt.active .pt-day,.pt.active .pt-name{color:#fff;}
+.task-group{margin-bottom:1.1rem;}
+.task-group-title{font-size:0.78rem; font-weight:700; color:var(--ink-mid); margin-bottom:0.55rem; display:flex; align-items:center; gap:0.45rem;}
+.task-group-title::before{content:''; width:3px; height:14px; background:var(--orange); display:inline-block; border-radius:2px;}
+.task{display:flex; gap:0.7rem; padding:0.8rem 0.9rem; background:var(--card); border:1px solid var(--border); border-radius:10px; margin-bottom:0.5rem; cursor:pointer; align-items:flex-start; transition:background 0.15s;}
+.task:active{background:var(--card-2);}
+.task.done{opacity:0.55;}
+.task.done .task-label{text-decoration:line-through;}
+.checkbox{width:21px; height:21px; border:1.5px solid var(--border-mid); border-radius:6px; flex-shrink:0; margin-top:1px; display:flex; align-items:center; justify-content:center; transition:all 0.18s;}
+.task.done .checkbox{background:var(--green); border-color:var(--green);}
+.checkbox svg{opacity:0; transition:opacity 0.18s;}
+.task.done .checkbox svg{opacity:1;}
+.task-body{flex:1;}
+.task-label{font-size:0.85rem; font-weight:500; line-height:1.5;}
+.task-meta{font-size:0.69rem; color:var(--ink-light); margin-top:0.25rem; line-height:1.5;}
+.checkpoint-banner{background:linear-gradient(120deg,var(--ink),#374151); color:#fff; padding:0.85rem 1rem; border-radius:10px; margin:0.3rem 0 1rem; font-size:0.78rem;}
+.checkpoint-banner b{color:#fff;}
+
+/* ── GUIDE ── */
+.guide-search{width:100%; padding:0.8rem 1rem; border:1px solid var(--border); border-radius:10px; font-family:inherit; font-size:0.88rem; margin-bottom:1rem; background:var(--card);}
+.guide-search:focus{outline:none; border-color:var(--orange);}
+.guide-cat{margin-bottom:0.8rem;}
+.guide-cat-head{display:flex; align-items:center; gap:0.8rem; padding:0.9rem 1rem; background:var(--card); border:1px solid var(--border); border-radius:12px; cursor:pointer; box-shadow:0 1px 2px rgba(0,0,0,0.03);}
+.guide-cat-head .gc-icon{width:38px; height:38px; border-radius:10px; display:flex; align-items:center; justify-content:center; font-size:1.15rem; flex-shrink:0;}
+.gc-icon.c-pay{background:var(--orange-bg);} .gc-icon.c-att{background:var(--green-bg);} .gc-icon.c-meet{background:var(--blue-bg);} .gc-icon.c-off{background:var(--purple-bg);} .gc-icon.c-proj{background:var(--orange-bg);}
+.guide-cat-head .gc-text{flex:1;}
+.guide-cat-head .gc-title{font-weight:700; font-size:0.96rem;}
+.guide-cat-head .gc-count{font-size:0.68rem; color:var(--ink-light);}
+.guide-cat-head .gc-arrow{color:var(--ink-faint); transition:transform 0.25s; font-size:1rem;}
+.guide-cat.open .gc-arrow{transform:rotate(90deg);}
+.guide-items{max-height:0; overflow:hidden; transition:max-height 0.35s ease;}
+.guide-cat.open .guide-items{max-height:4000px;}
+.guide-item{padding:0.75rem 1rem; margin:0.5rem 0 0 0.6rem; background:var(--card); border:1px solid var(--border); border-left:3px solid var(--orange); border-radius:0 10px 10px 0;}
+.guide-item h4{font-size:0.85rem; font-weight:700; margin-bottom:0.3rem; color:var(--ink);}
+.guide-item p{font-size:0.78rem; color:var(--ink-mid); line-height:1.65;}
+.guide-item .gi-flag{display:inline-block; background:var(--red); color:#fff; font-size:0.62rem; padding:0.1rem 0.4rem; border-radius:4px; margin-right:0.3rem;}
+.guide-item .gi-key{color:var(--red); font-weight:700;}
+
+/* ── QUIZ ── */
+.quiz-intro{text-align:center; padding:1.3rem 1rem 0.5rem;}
+.quiz-intro .qi-title{font-size:1.35rem; font-weight:800; margin-bottom:0.5rem;}
+.quiz-intro .qi-sub{font-size:0.82rem; color:var(--ink-light); margin-bottom:0.5rem; line-height:1.6;}
+.quiz-cats{display:flex; flex-wrap:wrap; gap:0.4rem; margin-bottom:0.5rem;}
+.qcat-chip{font-size:0.72rem; padding:0.4rem 0.75rem; border:1px solid var(--border); border-radius:20px; background:var(--card); cursor:pointer; transition:all 0.15s; font-weight:500;}
+.qcat-chip.on{background:var(--orange); color:#fff; border-color:var(--orange);}
+.quiz-modes{display:flex; flex-direction:column; gap:0.7rem;}
+.quiz-mode{padding:1rem; border:1px solid var(--border); border-radius:12px; background:var(--card); cursor:pointer; text-align:left; transition:transform 0.15s; display:flex; align-items:center; gap:0.8rem; box-shadow:0 1px 2px rgba(0,0,0,0.03);}
+.quiz-mode:active{transform:scale(0.99);}
+.quiz-mode .qm-icon{font-size:1.5rem;}
+.quiz-mode .qm-title{font-weight:700; font-size:0.96rem; margin-bottom:0.15rem;}
+.quiz-mode .qm-desc{font-size:0.72rem; color:var(--ink-light);}
+.quiz-bar{height:6px; background:var(--border); border-radius:3px; overflow:hidden; margin-bottom:0.4rem;}
+.quiz-bar-fill{height:100%; background:linear-gradient(90deg,var(--orange),var(--green)); transition:width 0.3s; border-radius:3px;}
+.quiz-counter{display:flex; justify-content:space-between; font-family:var(--mono); font-size:0.74rem; color:var(--ink-light); margin-bottom:1.2rem;}
+.quiz-q-cat{display:inline-block; font-family:var(--mono); font-size:0.62rem; letter-spacing:0.05em; color:var(--orange); border:1px solid var(--orange-border); padding:0.12rem 0.5rem; border-radius:20px; background:var(--orange-bg); margin-bottom:0.8rem; font-weight:500;}
+.quiz-q{font-size:1.12rem; font-weight:700; line-height:1.55; margin-bottom:1.3rem;}
+.quiz-opts{display:flex; flex-direction:column; gap:0.6rem;}
+.quiz-opt{padding:0.9rem 1rem; border:1.5px solid var(--border); border-radius:11px; background:var(--card); cursor:pointer; font-size:0.9rem; line-height:1.5; transition:all 0.15s; display:flex; gap:0.6rem; align-items:flex-start;}
+.quiz-opt .opt-letter{font-family:var(--mono); font-weight:700; color:var(--ink-faint); flex-shrink:0;}
+.quiz-opt:active{transform:scale(0.99);}
+.quiz-opt.correct{border-color:var(--green); background:var(--green-bg);}
+.quiz-opt.correct .opt-letter{color:var(--green);}
+.quiz-opt.wrong{border-color:var(--red); background:var(--red-bg);}
+.quiz-opt.wrong .opt-letter{color:var(--red);}
+.quiz-opt.disabled{pointer-events:none;}
+.quiz-explain{margin-top:1rem; padding:0.9rem 1rem; background:var(--card-2); border:1px solid var(--border); border-radius:11px; font-size:0.8rem; line-height:1.65; display:none;}
+.quiz-explain.show{display:block; animation:fade 0.3s;}
+.quiz-explain b{color:var(--orange-deep);}
+.quiz-next{width:100%; margin-top:1.2rem; padding:0.9rem; background:var(--ink); color:#fff; border:none; border-radius:11px; font-size:0.98rem; font-weight:700; cursor:pointer; display:none;}
+.quiz-next.show{display:block;}
+.quiz-result{text-align:center; padding:2rem 1rem;}
+.quiz-result .qr-score{font-family:var(--mono); font-size:3.2rem; font-weight:700; background:linear-gradient(120deg,var(--orange),var(--green)); -webkit-background-clip:text; background-clip:text; -webkit-text-fill-color:transparent;}
+.quiz-result .qr-label{font-size:1.1rem; font-weight:700; margin:0.4rem 0 0.3rem;}
+.quiz-result .qr-msg{font-size:0.82rem; color:var(--ink-light); margin-bottom:1.5rem;}
+.btn-primary{padding:0.85rem 1.6rem; background:var(--orange); color:#fff; border:none; border-radius:11px; font-size:0.94rem; font-weight:700; cursor:pointer; margin:0.3rem;}
+.btn-green{background:var(--green);}
+.btn-ghost{padding:0.85rem 1.6rem; background:transparent; color:var(--ink-mid); border:1px solid var(--border-mid); border-radius:11px; font-size:0.9rem; cursor:pointer; margin:0.3rem;}
+
+/* ── ASK ── */
+.ask-wrap{display:flex; flex-direction:column; height:calc(100vh - var(--nav-h) - 56px);}
+.ask-bar{display:flex; align-items:center; gap:0.5rem; padding:0.6rem 1rem; border-bottom:1px solid var(--border); background:var(--card);}
+.ask-bar .ab-title{font-weight:700; font-size:0.9rem; flex:1;}
+.ask-home-btn{font-size:0.72rem; padding:0.4rem 0.7rem; border:1px solid var(--border-mid); border-radius:18px; background:var(--card); color:var(--ink-mid); cursor:pointer; display:none;}
+.ask-home-btn.show{display:block;}
+.ask-log{flex:1; overflow-y:auto; padding:1rem 1.1rem; display:flex; flex-direction:column; gap:0.9rem;}
+.ask-hello{text-align:center; padding:1.3rem 1rem;}
+.ask-hello .ah-icon{font-size:2.2rem; margin-bottom:0.6rem;}
+.ask-hello .ah-title{font-size:1.08rem; font-weight:700; color:var(--ink); margin-bottom:0.4rem;}
+.ask-hello .ah-sub{font-size:0.78rem; line-height:1.6; color:var(--ink-light);}
+.ask-suggest{display:flex; flex-direction:column; gap:0.5rem; margin-top:1.2rem; text-align:left;}
+.ask-sg{padding:0.75rem 0.9rem; background:var(--card); border:1px solid var(--border); border-radius:11px; font-size:0.8rem; cursor:pointer; color:var(--ink-mid);}
+.ask-sg::before{content:'💬 ';}
+.bubble{max-width:86%; padding:0.8rem 1rem; border-radius:14px; font-size:0.86rem; line-height:1.65; white-space:pre-wrap;}
+.bubble.user{align-self:flex-end; background:var(--ink); color:#fff; border-bottom-right-radius:4px;}
+.bubble.bot{align-self:flex-start; background:var(--card); border:1px solid var(--border); border-bottom-left-radius:4px;}
+.bubble.bot .src{margin-top:0.5rem; padding-top:0.5rem; border-top:1px dashed var(--border); font-size:0.68rem; color:var(--ink-light);}
+.bubble.typing{align-self:flex-start; background:var(--card); border:1px solid var(--border); padding:0.9rem 1rem;}
+.dot{display:inline-block; width:7px; height:7px; border-radius:50%; background:var(--orange); margin:0 2px; animation:blink 1.2s infinite;}
+.dot:nth-child(2){animation-delay:0.2s; background:var(--green);} .dot:nth-child(3){animation-delay:0.4s; background:var(--blue);}
+@keyframes blink{0%,60%,100%{opacity:0.25;} 30%{opacity:1;}}
+.ask-input-row{display:flex; gap:0.5rem; padding:0.7rem 0.8rem; border-top:1px solid var(--border); background:var(--card);}
+.ask-input{flex:1; padding:0.7rem 0.95rem; border:1px solid var(--border); border-radius:22px; font-family:inherit; font-size:0.86rem; resize:none; max-height:90px; background:var(--bg);}
+.ask-input:focus{outline:none; border-color:var(--orange);}
+.ask-send{width:42px; height:42px; border-radius:50%; background:var(--orange); color:#fff; border:none; font-size:1.1rem; cursor:pointer; flex-shrink:0; align-self:flex-end;}
+.ask-mock-note{font-family:var(--mono); font-size:0.58rem; text-align:center; color:var(--ink-faint); padding:0.3rem;}
+
+/* ── BOARD ── */
+.board-tabs{display:flex; gap:0.4rem; margin-bottom:1rem;}
+.bt{flex:1; text-align:center; padding:0.6rem; border:1px solid var(--border); border-radius:9px; font-size:0.8rem; cursor:pointer; background:var(--card); font-weight:500;}
+.bt.active{background:var(--ink); color:#fff; border-color:var(--ink);}
+.notice{background:var(--card); border:1px solid var(--border); border-radius:12px; padding:0.95rem 1rem; margin-bottom:0.8rem; border-left:3px solid var(--orange); box-shadow:0 1px 2px rgba(0,0,0,0.03);}
+.notice.urgent{border-left-color:var(--red);}
+.notice-head{display:flex; align-items:center; gap:0.5rem; margin-bottom:0.4rem;}
+.notice-tag{font-size:0.6rem; padding:0.12rem 0.5rem; border-radius:20px; font-family:var(--mono); letter-spacing:0.03em; font-weight:500;}
+.notice-tag.new{background:var(--orange-bg); color:var(--orange-deep); border:1px solid var(--orange-border);}
+.notice-tag.rule{background:var(--blue-bg); color:var(--blue); border:1px solid #bfdbfe;}
+.notice-tag.info{background:var(--green-bg); color:var(--green-deep); border:1px solid var(--green-border);}
+.notice-date{font-family:var(--mono); font-size:0.65rem; color:var(--ink-faint); margin-left:auto;}
+.notice-title{font-weight:700; font-size:0.92rem; margin-bottom:0.25rem;}
+.notice-body{font-size:0.78rem; color:var(--ink-mid); line-height:1.6;}
+.meeting{background:var(--card); border:1px solid var(--border); border-radius:12px; padding:0.95rem 1rem; margin-bottom:0.8rem; display:flex; gap:0.9rem; box-shadow:0 1px 2px rgba(0,0,0,0.03);}
+.meeting-date{text-align:center; flex-shrink:0; border-right:1px solid var(--border); padding-right:0.9rem; min-width:62px;}
+.meeting-date .md-day{font-family:var(--mono); font-size:1.6rem; font-weight:700; color:var(--orange); line-height:1;}
+.meeting-date .md-mon{font-size:0.62rem; color:var(--ink-light); margin-top:0.2rem;}
+.meeting-info{flex:1;}
+.meeting-info .mi-title{font-weight:700; font-size:0.9rem;}
+.meeting-info .mi-time{font-family:var(--mono); font-size:0.68rem; color:var(--ink-light); margin:0.15rem 0;}
+.meeting-info .mi-agenda{font-size:0.75rem; color:var(--ink-mid); line-height:1.55;}
+.minutes-item{display:flex; align-items:center; gap:0.7rem; padding:0.85rem 1rem; background:var(--card); border:1px solid var(--border); border-radius:11px; margin-bottom:0.6rem; cursor:pointer; box-shadow:0 1px 2px rgba(0,0,0,0.03);}
+.minutes-item .min-icon{color:var(--orange); font-size:1.1rem;}
+.minutes-item .min-text{flex:1;}
+.minutes-item .min-title{font-size:0.85rem; font-weight:500;}
+.minutes-item .min-meta{font-family:var(--mono); font-size:0.66rem; color:var(--ink-light);}
+.minutes-item .min-dl{color:var(--orange); font-size:0.95rem;}
+
+/* ── SETTINGS ── */
+.set-block{background:var(--card); border:1px solid var(--border); border-radius:12px; padding:1rem; margin-bottom:0.9rem; box-shadow:0 1px 2px rgba(0,0,0,0.03);}
+.set-block h3{font-size:0.94rem; font-weight:700; margin-bottom:0.3rem; display:flex; align-items:center; gap:0.5rem;}
+.set-block .sb-desc{font-size:0.74rem; color:var(--ink-light); margin-bottom:0.8rem; line-height:1.55;}
+.set-row{display:flex; align-items:center; justify-content:space-between; padding:0.7rem 0; border-bottom:1px solid var(--border);}
+.set-row:last-child{border-bottom:none;}
+.set-row .sr-label{font-size:0.85rem;}
+.set-row .sr-sub{font-size:0.68rem; color:var(--ink-light);}
+.prog-wrap{display:flex; align-items:center; gap:1rem;}
+.ring{width:56px; height:56px; flex-shrink:0;}
+.prog-text b{font-size:0.95rem; font-weight:700;}
+.prog-text p{font-size:0.7rem; color:var(--ink-light); margin-top:0.1rem;}
+.lock-badge{font-size:0.66rem; color:var(--ink-faint); background:var(--bg); padding:0.2rem 0.5rem; border-radius:20px; border:1px solid var(--border);}
+.btn-block{width:100%; padding:0.85rem; border:1px solid var(--border-mid); border-radius:11px; background:var(--card); font-family:inherit; font-size:0.88rem; font-weight:600; color:var(--ink-mid); cursor:pointer; display:flex; align-items:center; justify-content:center; gap:0.5rem;}
+.btn-block.accent{background:var(--ink); color:#fff; border-color:var(--ink);}
+
+/* ── ADMIN (資訊更新) ── */
+.admin-pw-wrap{padding:2.5rem 1.5rem; text-align:center;}
+.admin-pw-wrap .ap-icon{font-size:2.3rem; margin-bottom:0.8rem;}
+.admin-pw-wrap .ap-title{font-size:1.1rem; font-weight:700; margin-bottom:0.4rem;}
+.admin-pw-wrap .ap-sub{font-size:0.76rem; color:var(--ink-light); margin-bottom:1.3rem;}
+.admin-pw{width:100%; max-width:240px; padding:0.8rem; border:1px solid var(--border-mid); border-radius:11px; font-family:var(--mono); text-align:center; font-size:1rem; margin-bottom:1rem; letter-spacing:0.15em; background:var(--card);}
+.admin-pw:focus{outline:none; border-color:var(--orange);}
+.admin-block{background:var(--card); border:1px solid var(--border); border-radius:12px; padding:1rem; margin-bottom:1rem; box-shadow:0 1px 2px rgba(0,0,0,0.03);}
+.admin-block h3{font-size:0.94rem; font-weight:700; margin-bottom:0.3rem; display:flex; align-items:center; gap:0.5rem;}
+.admin-block .ab-desc{font-size:0.72rem; color:var(--ink-light); margin-bottom:0.8rem; line-height:1.55;}
+.admin-field{margin-bottom:0.8rem;}
+.admin-field label{font-size:0.72rem; font-weight:600; color:var(--ink-mid); display:block; margin-bottom:0.3rem;}
+.admin-field input,.admin-field textarea,.admin-field select{width:100%; padding:0.65rem 0.75rem; border:1px solid var(--border); border-radius:9px; font-family:inherit; font-size:0.82rem; background:var(--bg);}
+.admin-field textarea{resize:vertical; min-height:70px; font-family:var(--mono); font-size:0.76rem;}
+.admin-field input:focus,.admin-field textarea:focus{outline:none; border-color:var(--orange);}
+.drop-zone{border:1.5px dashed var(--border-mid); border-radius:11px; padding:1.3rem; text-align:center; color:var(--ink-light); font-size:0.78rem; background:var(--bg); cursor:pointer;}
+.drop-zone .dz-icon{font-size:1.5rem; display:block; margin-bottom:0.4rem;}
+.admin-note{font-family:var(--mono); font-size:0.62rem; color:var(--ink-light); background:var(--orange-bg); border:1px solid var(--orange-border); border-radius:9px; padding:0.6rem 0.7rem; line-height:1.6; margin-top:0.5rem;}
+.file-chip{display:flex; align-items:center; gap:0.5rem; padding:0.5rem 0.7rem; background:var(--bg); border:1px solid var(--border); border-radius:9px; font-size:0.74rem; margin-top:0.5rem;}
+.file-chip .fc-x{margin-left:auto; color:var(--red); cursor:pointer;}
+
+/* ── INTRO / CAREER PAGES ── */
+.intro-block{background:var(--card); border:1px solid var(--border); border-radius:12px; padding:1.1rem; margin-bottom:0.9rem; box-shadow:0 1px 2px rgba(0,0,0,0.03);}
+.intro-block .ib-lead{font-size:0.85rem; line-height:1.75; color:var(--ink-mid);}
+.intro-block .ib-lead b{color:var(--ink);}
+.team-card{background:var(--card); border:1px solid var(--border); border-radius:12px; margin-bottom:0.8rem; overflow:hidden; box-shadow:0 1px 2px rgba(0,0,0,0.03);}
+.team-head{padding:0.85rem 1rem; display:flex; align-items:center; gap:0.7rem; cursor:pointer;}
+.team-head .th-no{width:30px; height:30px; border-radius:8px; background:var(--orange-bg); color:var(--orange-deep); display:flex; align-items:center; justify-content:center; font-weight:700; font-family:var(--mono); font-size:0.85rem; flex-shrink:0;}
+.team-head .th-name{font-weight:700; font-size:0.92rem; flex:1;}
+.team-head .th-vac{font-size:0.64rem; color:var(--green-deep); background:var(--green-bg); border:1px solid var(--green-border); padding:0.15rem 0.5rem; border-radius:20px; font-weight:500;}
+.team-head .th-arrow{color:var(--ink-faint); transition:transform 0.25s;}
+.team-card.open .th-arrow{transform:rotate(90deg);}
+.team-body{max-height:0; overflow:hidden; transition:max-height 0.3s ease; padding:0 1rem;}
+.team-card.open .team-body{max-height:600px; padding:0 1rem 1rem;}
+.team-body .tb-row{font-size:0.78rem; line-height:1.6; margin-bottom:0.5rem;}
+.team-body .tb-tag{display:inline-block; font-size:0.66rem; color:var(--ink-light); background:var(--bg); border:1px solid var(--border); padding:0.1rem 0.45rem; border-radius:6px; margin-right:0.3rem;}
+
+.career-flow{position:relative;}
+.career-stage{background:var(--card); border:1px solid var(--border); border-radius:12px; padding:1rem; margin-bottom:0.3rem; box-shadow:0 1px 2px rgba(0,0,0,0.03); border-top:3px solid var(--orange);}
+.career-stage.s2{border-top-color:var(--green);} .career-stage.s3{border-top-color:var(--blue);} .career-stage.s0{border-top-color:var(--ink-faint);}
+.career-stage .cs-level{font-family:var(--mono); font-size:0.6rem; letter-spacing:0.06em; color:var(--ink-faint); text-transform:uppercase;}
+.career-stage .cs-name{font-size:1rem; font-weight:800; margin:0.15rem 0 0.5rem;}
+.career-stage .cs-name .badge{font-size:0.62rem; font-weight:600; padding:0.12rem 0.5rem; border-radius:20px; vertical-align:middle; margin-left:0.4rem;}
+.badge.b1{background:var(--orange-bg); color:var(--orange-deep);} .badge.b2{background:var(--green-bg); color:var(--green-deep);} .badge.b3{background:var(--blue-bg); color:var(--blue);}
+.career-stage .cs-desc{font-size:0.78rem; color:var(--ink-mid); line-height:1.6;}
+.career-arrow{text-align:center; color:var(--ink-faint); font-size:1.1rem; margin:0.1rem 0;}
+.cap-grid{display:grid; grid-template-columns:repeat(3,1fr); gap:0.5rem; margin:0.6rem 0;}
+.cap-card{background:var(--bg); border:1px solid var(--border); border-radius:9px; padding:0.6rem; text-align:center;}
+.cap-card .cap-code{font-family:var(--mono); font-weight:700; font-size:0.8rem; color:var(--orange);}
+.cap-card .cap-name{font-size:0.68rem; font-weight:600; margin:0.2rem 0;}
+.cap-card .cap-desc{font-size:0.62rem; color:var(--ink-light); line-height:1.4;}
+
+/* ── BOTTOM NAV ── */
+.botnav{position:fixed; bottom:0; left:50%; transform:translateX(-50%); width:100%; max-width:520px; height:var(--nav-h); background:var(--card); border-top:1px solid var(--border); display:flex; z-index:60; box-shadow:0 -2px 12px rgba(0,0,0,0.05);}
+.nav-btn{flex:1; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:0.12rem; cursor:pointer; color:var(--ink-faint); transition:color 0.2s; position:relative; padding:0 0.1rem;}
+.nav-btn .ni{font-size:1.2rem; line-height:1;}
+.nav-btn .nl{font-size:0.56rem; letter-spacing:0.01em; white-space:nowrap;}
+.nav-btn.active{color:var(--orange);}
+.nav-btn.active::before{content:''; position:absolute; top:0; left:25%; width:50%; height:2.5px; background:var(--orange); border-radius:2px;}
+
+.toast{position:fixed; bottom:calc(var(--nav-h) + 16px); left:50%; transform:translateX(-50%) translateY(20px); background:var(--ink); color:#fff; padding:0.7rem 1.2rem; border-radius:30px; font-size:0.8rem; opacity:0; transition:all 0.3s; z-index:100; pointer-events:none; white-space:nowrap;}
+.toast.show{opacity:1; transform:translateX(-50%) translateY(0);}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="logo-circ">研</div>
+  <div class="topbar-titles">
+    <div class="topbar-eyebrow">TRIWRA · 研究二所</div>
+    <div class="topbar-title">新人培訓</div>
+  </div>
+</div>
+
+<!-- ═══════════ 首頁 ═══════════ -->
+<div class="view active" id="view-home">
+  <div class="hero">
+    <div class="hero-eyebrow">公共治理與制度創新研究所</div>
+    <div class="hero-title">歡迎加入<span class="accent">研究二所</span></div>
+    <div class="hero-sub">希望二所是你發揮長才的舞台。</div>
+  </div>
+
+  <div class="stat-strip">
+    <div class="stat c1" onclick="goTasks('30')"><div class="stat-num mono">30</div><div class="stat-label">日任務</div><div class="stat-day mono">DAY 1–30</div></div>
+    <div class="stat c2" onclick="goTasks('60')"><div class="stat-num mono">60</div><div class="stat-label">日任務</div><div class="stat-day mono">DAY 31–60</div></div>
+    <div class="stat c3" onclick="goTasks('90')"><div class="stat-num mono">90</div><div class="stat-label">日任務</div><div class="stat-day mono">DAY 61–90</div></div>
+  </div>
+
+  <div class="scroll-area">
+    <div class="section-head"><span class="section-bar"></span><span class="section-title">你可以從這裡開始</span></div>
+    <div class="quick-list">
+      <div class="quick-card" onclick="startQuiz('all','exam')">
+        <div class="qc-icon i1">📝</div>
+        <div class="qc-body"><div class="qc-title">新人訓練</div><div class="qc-desc">有點像 Kahoot! 刷題上手 Go!</div></div>
+        <span class="qc-arrow">›</span>
+      </div>
+      <div class="quick-card" onclick="switchView('tasks')">
+        <div class="qc-icon i2">🌱</div>
+        <div class="qc-body"><div class="qc-title">二所人才養成路徑</div><div class="qc-desc">30 / 60 / 90 日該完成的事，逐項打勾</div></div>
+        <span class="qc-arrow">›</span>
+      </div>
+      <div class="quick-card" onclick="switchView('intro')">
+        <div class="qc-icon i3">🏛️</div>
+        <div class="qc-body"><div class="qc-title">研究院與二所介紹</div><div class="qc-desc">這邊講正經，八卦問隔壁 ＾＾</div></div>
+        <span class="qc-arrow">›</span>
+      </div>
+      <div class="quick-card" onclick="switchView('ask')">
+        <div class="qc-icon i4">💬</div>
+        <div class="qc-body"><div class="qc-title">問問題</div><div class="qc-desc">任何不確定的事，都可以問問答 AI</div></div>
+        <span class="qc-arrow">›</span>
+      </div>
+    </div>
+
+    <div class="section-head"><span class="section-bar g"></span><span class="section-title">主管與聯絡</span></div>
+    <div class="card kvbox">
+      <div class="kv-title">所處長</div>
+      <div class="kv-body">
+        <div><b>所長　吳柏澍</b> · 27-5「治水圖強」前<br><span class="muted" style="font-size:0.74rem;">公文／費用／差勤／請款簽核</span></div>
+        <div style="margin-top:0.4rem;"><b>副所長　許峻嘉</b> · 27-5 門口<br><span class="muted" style="font-size:0.74rem;">請款簽核</span></div>
+      </div>
+    </div>
+    <div class="card kvbox">
+      <div class="kv-title">院長室</div>
+      <div class="kv-body">
+        <div><b>院長　虞國興</b> · 院長辦公室</div>
+        <div><b>分院院長兼院長特助　邱豐真</b> · 27-6 獨立辦公室</div>
+        <div><b>副院長　邱雅梅</b> · 27-5 窗戶前</div>
+      </div>
+    </div>
+    <div class="card kvbox">
+      <div class="kv-title">行政處對口</div>
+      <div class="kv-body" style="font-size:0.78rem;">
+        <div>請購 <b>永碧</b>｜請款 <b>泓郁</b>｜差勤 <b>嘉真</b>｜辦公／設備 <b>趙瑜</b></div>
+        <div>美編 <b>王瀞慧 #687</b>、<b>邵仲毅 Peter #686</b>｜公務車協調 <b>瑄晨</b></div>
+        <div>收據用印保管 <b>皓美</b>｜統一編號 <b class="mono">50632754</b></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════ 工作指引 ═══════════ -->
+<div class="view" id="view-guide">
+  <div class="scroll-area">
+    <div class="section-head"><span class="section-bar"></span><span class="section-title">分門別類工作指引</span></div>
+    <input class="guide-search" id="guideSearch" placeholder="🔍 搜尋：便當、出席費、打卡、公務車…" oninput="filterGuide(this.value)">
+    <div id="guideContent"></div>
+  </div>
+</div>
+
+<!-- ═══════════ 快速上手 Quiz ═══════════ -->
+<div class="view" id="view-quiz">
+  <div class="scroll-area">
+    <div id="quizHome">
+      <div class="quiz-intro">
+        <div class="qi-title">快速上手 Quiz</div>
+        <div class="qi-sub">像 Kahoot 一樣一直練。<br>答錯沒關係，看解析、記起來就好。</div>
+      </div>
+      <div class="section-head"><span class="section-bar"></span><span class="section-title">選擇範圍</span></div>
+      <div class="quiz-cats" id="quizCats"></div>
+      <div class="section-head"><span class="section-bar g"></span><span class="section-title">選擇模式</span></div>
+      <div class="quiz-modes">
+        <div class="quiz-mode" onclick="startQuiz('selected','drill')"><span class="qm-icon">⚡</span><div><div class="qm-title">無限刷題</div><div class="qm-desc">隨機抽題，一題接一題，練到熟為止</div></div></div>
+        <div class="quiz-mode" onclick="startQuiz('selected','exam')"><span class="qm-icon">📝</span><div><div class="qm-title">完整測驗</div><div class="qm-desc">跑完選定範圍所有題目，最後給分數</div></div></div>
+      </div>
+    </div>
+    <div id="quizStage" style="display:none;"></div>
+  </div>
+</div>
+
+<!-- ═══════════ 問答 AI ═══════════ -->
+<div class="view" id="view-ask">
+  <div class="ask-bar">
+    <span class="ab-title">問答 AI</span>
+    <button class="ask-home-btn" id="askHomeBtn" onclick="resetAsk()">↺ 回到問答首頁</button>
+  </div>
+  <div class="ask-wrap">
+    <div class="ask-log" id="askLog">
+      <div class="ask-hello" id="askHello">
+        <div class="ah-icon">🤖</div>
+        <div class="ah-title">有什麼想問的？</div>
+        <div class="ah-sub">行政、請款、差勤、計畫流程…<br>任何不確定的事都可以問。</div>
+        <div class="ask-suggest">
+          <div class="ask-sg" onclick="askSuggest(this)">便當一個人最多可以報多少錢？</div>
+          <div class="ask-sg" onclick="askSuggest(this)">預請款最晚要幾天前送出？</div>
+          <div class="ask-sg" onclick="askSuggest(this)">出差去台中要怎麼安排交通？</div>
+          <div class="ask-sg" onclick="askSuggest(this)">研二所有哪幾個小組？</div>
+        </div>
+      </div>
+    </div>
+    <div class="ask-input-row">
+      <textarea class="ask-input" id="askInput" rows="1" placeholder="輸入問題…" oninput="autoGrow(this)" onkeydown="askKey(event)"></textarea>
+      <button class="ask-send" onclick="sendAsk()">↑</button>
+    </div>
+    <div class="ask-mock-note">⚠ 預覽版為模擬回答 · 部署後由 Sonnet 讀知識庫回答</div>
+  </div>
+</div>
+
+<!-- ═══════════ 公告看板 ═══════════ -->
+<div class="view" id="view-board">
+  <div class="scroll-area">
+    <div class="section-head"><span class="section-bar"></span><span class="section-title">公告看板</span></div>
+    <div class="board-tabs">
+      <div class="bt active" data-board="notice" onclick="setBoard('notice')">公告</div>
+      <div class="bt" data-board="meeting" onclick="setBoard('meeting')">所務會議</div>
+      <div class="bt" data-board="minutes" onclick="setBoard('minutes')">會議記錄</div>
+    </div>
+    <div id="boardContent"></div>
+  </div>
+</div>
+
+<!-- ═══════════ 研究院與二所介紹 ═══════════ -->
+<div class="view" id="view-intro">
+  <div class="scroll-area">
+    <div class="section-head"><span class="section-bar b"></span><span class="section-title">研究院與二所介紹</span></div>
+
+    <div class="intro-block">
+      <div class="kv-title" style="font-family:var(--mono); font-size:0.64rem; color:var(--ink-faint); letter-spacing:0.05em; margin-bottom:0.5rem;">關於研究院</div>
+      <div class="ib-lead"><b>財團法人台灣水資源與農業研究院（TRIWRA）</b>長期作為農業部與農田水利署的智庫型研究機構，業務橫跨水資源調配、灌溉管理、農業生態、綠能與公共治理。院長為<b>虞國興</b>博士。研究院下設多個研究所，研二所是其中專責「公共治理與制度創新」的單位。</div>
+    </div>
+
+    <div class="intro-block">
+      <div class="kv-title" style="font-family:var(--mono); font-size:0.64rem; color:var(--ink-faint); letter-spacing:0.05em; margin-bottom:0.5rem;">關於研究二所</div>
+      <div class="ib-lead">本所<b>以社會科學為本</b>，專注政府公共事務與政策規劃之<b>公共治理與制度創新</b>專業幕僚服務。業務範疇涵蓋：政策方案規劃、制度比較研究、法規研析及擬制草案、公部門組織設計、公私協力夥伴關係建立、空間大數據分析。<br><br>主要工作是<b>政府部門委辦研究計畫</b>的推動與執行——除政策規劃、方案研析、制度設計外，也包含報告撰寫、簡報製作等幕僚工作，以及籌辦各式會議（專家學者研討會、跨部門座談會、論壇大型會議）。</div>
+    </div>
+
+    <div class="section-head"><span class="section-bar g"></span><span class="section-title">五個專業小組</span><span class="section-note">點擊展開</span></div>
+    <div id="teamList"></div>
+
+    <div class="section-head"><span class="section-bar p"></span><span class="section-title">研究方法與人才取向</span></div>
+    <div class="intro-block">
+      <div class="ib-lead"><b>研究方法</b>：各小組頻繁運用社會科學方法——量化（制度比較研究、問卷設計與調查、統計分析）與質化（深度訪談、焦點分析）。各專案計畫都是研究方法的實踐場域，歡迎有相關背景者，或初心者一起練功。<br><br><b>本所強調</b>客戶導向之制度創新、政策實務的可操作性，持續發展務實色彩的行動理論與方案策略規劃技法。簡言之，我們邀請你一同成為政府機關亮點施政的長期夥伴。</div>
+    </div>
+    <div class="intro-block">
+      <div class="kv-title" style="font-family:var(--mono); font-size:0.64rem; color:var(--ink-faint); letter-spacing:0.05em; margin-bottom:0.5rem;">歡迎的背景</div>
+      <div class="ib-lead" style="font-size:0.8rem;">社會科學（公行、政治、經濟、社會、勞動、新聞、社福）、農業學門（農經、農推）、都市規劃、能源科技。<br><b>跨域加分</b>：GIS 空間大數據、輿情監測分析、社區營造與地方創生（台/客語加分）、人民團體輔導培訓、綠能系統技術或法規（含儲能、電業法規）、政府會計、人事行政與勞資關係、土地法規與地政。</div>
+    </div>
+
+    <div class="card kvbox" style="background:var(--orange-bg); border-color:var(--orange-border);">
+      <div class="kv-body" style="font-size:0.8rem; color:var(--orange-deep);">💡 想了解自己未來的成長路線？看看下一頁的「二所職涯路徑」。</div>
+    </div>
+    <button class="btn-block accent" onclick="switchView('career')">查看二所職涯路徑 →</button>
+  </div>
+</div>
+
+<!-- ═══════════ 二所職涯路徑 ═══════════ -->
+<div class="view" id="view-career">
+  <div class="scroll-area">
+    <div class="section-head"><span class="section-bar"></span><span class="section-title">二所職涯路徑</span></div>
+    <div class="intro-block">
+      <div class="ib-lead">本所的成長路徑有兩個維度交織：<br>① <b>能力取向</b>——你想累積哪一種專長（三條軌道）；<br>② <b>資歷階段</b>——你爬到哪個高度（三個層級）。<br><br>核心邏輯：<b>當你具備其中兩種能力取向時，就能晉升到下一個資歷階段。</b>這也對應新人路徑的 30/60/90 日養成。</div>
+    </div>
+
+    <div class="section-head"><span class="section-bar g"></span><span class="section-title">三種能力取向</span></div>
+    <div class="cap-grid">
+      <div class="cap-card"><div class="cap-code">A-1</div><div class="cap-name">專案管理</div><div class="cap-desc">進度管控、跨組協調、交付品質</div></div>
+      <div class="cap-card"><div class="cap-code">A-2</div><div class="cap-name">政策領域</div><div class="cap-desc">議題研析、法規草擬、制度比較</div></div>
+      <div class="cap-card"><div class="cap-code">A-3</div><div class="cap-name">業務關係</div><div class="cap-desc">機關對接、需求轉譯、新業務開發</div></div>
+    </div>
+
+    <div class="section-head"><span class="section-bar b"></span><span class="section-title">三個資歷階段</span></div>
+    <div class="career-flow">
+      <div class="career-stage s0">
+        <div class="cs-level">START · 入門</div>
+        <div class="cs-name">行政助理 <span class="badge" style="background:var(--bg);color:var(--ink-light);">B 類</span></div>
+        <div class="cs-desc">文書事務、會議籌辦、採購核銷。可逐步累積特定業務領域知識，成為轉型研究路徑的起點。</div>
+      </div>
+      <div class="career-arrow">↓</div>
+      <div class="career-stage">
+        <div class="cs-level">STAGE 1 · 養成</div>
+        <div class="cs-name">研究人員 <span class="badge b1">單軌</span></div>
+        <div class="cs-desc">負責單一計畫的整體執行與交付，是養成的核心起點。從 A-1／A-2／A-3 中先練起一條主軌。對應新人 30/60/90 日的通用底層能力。</div>
+      </div>
+      <div class="career-arrow">↓ <span style="font-size:0.7rem;">具備兩種能力取向</span></div>
+      <div class="career-stage s2">
+        <div class="cs-level">STAGE 2 · 獨當一面</div>
+        <div class="cs-name">專案經理／資深研究人員 <span class="badge b2">跨 2 軌</span></div>
+        <div class="cs-desc">具備兩種能力取向者：<br>• <b>A-1＋A-2</b> 資深研究人員——可獨立主持子計畫、帶領小組執行<br>• <b>A-1＋A-3</b> 專案經理（PM）——多計畫統籌、客戶關係維繫<br>• <b>A-2＋A-3</b> 領域業務負責人——以領域專業開發新業務</div>
+      </div>
+      <div class="career-arrow">↓ <span style="font-size:0.7rem;">三軌整合</span></div>
+      <div class="career-stage s3">
+        <div class="cs-level">STAGE 3 · 對外責任人</div>
+        <div class="cs-name">計畫主持人 <span class="badge b3">跨 3 軌</span></div>
+        <div class="cs-desc">A-1＋A-2＋A-3 三軌整合，能獨立主持大型計畫、跨機關溝通、把關產出品質，代表研究所對外的最高執行與知識責任人。<br><span class="muted" style="font-size:0.72rem;">計畫主持人人數，正是研究所可承接計畫規模的直接指標。</span></div>
+      </div>
+      <div class="career-arrow">↓</div>
+      <div class="career-stage s0" style="border-top-color:var(--ink);">
+        <div class="cs-level">BEYOND · 管理職</div>
+        <div class="cs-name">小組召集人 · 副所長</div>
+        <div class="cs-desc">統籌跨計畫、跨小組業務與人才培育，協助所長推動整體發展策略與對外關係。</div>
+      </div>
+    </div>
+
+    <div class="card kvbox" style="margin-top:1rem; background:var(--green-bg); border-color:var(--green-border);">
+      <div class="kv-body" style="font-size:0.8rem; color:var(--green-deep);">🎯 第一天就知道 90 天後的目標、什麼是及格、什麼是加分——這就是消除模糊焦慮的設計。每個階段的檢核點，都在「二所人才養成路徑」裡。</div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════ 二所人才養成路徑（任務）═══════════ -->
+<div class="view" id="view-tasks">
+  <div class="scroll-area">
+    <div class="section-head"><span class="section-bar"></span><span class="section-title">二所人才養成路徑</span><span class="section-note">打勾＝自我檢視</span></div>
+    <div class="phase-tabs">
+      <div class="pt a1 active" data-phase="30" onclick="setTaskPhase('30')"><div class="pt-day mono">D30</div><div class="pt-name">獨立完成日常</div></div>
+      <div class="pt a2" data-phase="60" onclick="setTaskPhase('60')"><div class="pt-day mono">D60</div><div class="pt-name">接手計畫片段</div></div>
+      <div class="pt a3" data-phase="90" onclick="setTaskPhase('90')"><div class="pt-day mono">D90</div><div class="pt-name">有效執行成員</div></div>
+    </div>
+    <div id="taskContent"></div>
+  </div>
+</div>
+
+<!-- ═══════════ 設定 ═══════════ -->
+<div class="view" id="view-settings">
+  <div class="scroll-area">
+    <div class="section-head"><span class="section-bar"></span><span class="section-title">設定</span></div>
+
+    <div class="set-block">
+      <h3>📊 養成進度</h3>
+      <div class="sb-desc">登入後可追蹤進度（開發中）。目前進度僅暫存於本機，重新整理會重置。</div>
+      <div class="prog-wrap">
+        <svg class="ring" viewBox="0 0 36 36">
+          <path d="M18 2.5a15.5 15.5 0 1 1 0 31 15.5 15.5 0 0 1 0-31" fill="none" stroke="#e5e7eb" stroke-width="3"/>
+          <path id="ringFill" d="M18 2.5a15.5 15.5 0 1 1 0 31 15.5 15.5 0 0 1 0-31" fill="none" stroke="#ea580c" stroke-width="3" stroke-linecap="round" stroke-dasharray="97.4" stroke-dashoffset="97.4"/>
+        </svg>
+        <div class="prog-text"><b id="progBig">尚未開始</b><p id="progSmall">完成任務以檢視養成進度</p></div>
+      </div>
+    </div>
+
+    <div class="set-block">
+      <h3>👤 帳號</h3>
+      <div class="set-row"><div><div class="sr-label">登入以儲存進度</div><div class="sr-sub">跨裝置同步任務與刷題記錄</div></div><span class="lock-badge">開發中</span></div>
+      <div class="set-row"><div><div class="sr-label">通知與提醒</div><div class="sr-sub">每日任務提醒</div></div><span class="lock-badge">規劃中</span></div>
+      <div class="set-row"><div><div class="sr-label">深色模式</div><div class="sr-sub">護眼配色</div></div><span class="lock-badge">規劃中</span></div>
+    </div>
+
+    <div class="set-block">
+      <h3>🔧 內容管理</h3>
+      <div class="sb-desc">管理者專用：更新新人培訓教材、公告與所務會議資訊。</div>
+      <button class="btn-block" onclick="openAdmin()">🔐 資訊更新</button>
+    </div>
+
+    <div class="set-block">
+      <h3>ℹ️ 關於</h3>
+      <div class="set-row"><div class="sr-label">版本</div><span class="sr-sub mono">v0.2 · 預覽版</span></div>
+      <div class="set-row"><div class="sr-label">單位</div><span class="sr-sub">研二所 · 公共治理與制度創新研究所</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════ 資訊更新後台（隱藏，由設定進入）═══════════ -->
+<div class="view" id="view-admin">
+  <div class="scroll-area">
+    <div id="adminLock">
+      <div class="admin-pw-wrap">
+        <div class="ap-icon">🔐</div>
+        <div class="ap-title">資訊更新</div>
+        <div class="ap-sub">請輸入管理密碼</div>
+        <input class="admin-pw" id="adminPw" type="password" placeholder="••••••" onkeydown="if(event.key==='Enter')checkAdmin()">
+        <br><button class="btn-primary" onclick="checkAdmin()">進入</button><br>
+        <button class="btn-ghost" onclick="switchView('settings')" style="margin-top:0.5rem;">返回設定</button>
+      </div>
+    </div>
+
+    <div id="adminPanel" style="display:none;">
+      <div class="section-head"><span class="section-bar"></span><span class="section-title">資訊更新</span><span class="section-note" onclick="logoutAdmin()" style="cursor:pointer; color:var(--red);">登出</span></div>
+
+      <div class="admin-block">
+        <h3>📚 更新教學素材</h3>
+        <div class="ab-desc">上傳 PDF 或 .md 檔，內容會進入知識庫供問答引用。部署後等同丟進 Drive 指定資料夾。</div>
+        <div class="drop-zone" onclick="document.getElementById('matFile').click()"><span class="dz-icon">📤</span>拖曳或點此選擇檔案<br><span style="font-size:0.66rem;">支援 .pdf · .md · .txt</span></div>
+        <input type="file" id="matFile" accept=".pdf,.md,.txt" style="display:none;" onchange="mockUpload(this)">
+        <div id="matList"></div>
+        <div class="admin-note">部署對應：寫入 Drive「知識庫」資料夾 → 重新整理 KB_DOC 串接</div>
+      </div>
+
+      <div class="admin-block">
+        <h3>📌 發布公告</h3>
+        <div class="ab-desc">新增看板公告或新規定，立即顯示於「公告看板」。</div>
+        <div class="admin-field"><label>標籤</label><select id="ntTag"><option value="new">最新消息</option><option value="rule">新規定</option><option value="info">一般資訊</option></select></div>
+        <div class="admin-field"><label>標題</label><input id="ntTitle" placeholder="例：差勤系統啟用人臉辨識"></div>
+        <div class="admin-field"><label>內容</label><textarea id="ntBody" placeholder="公告內容…"></textarea></div>
+        <button class="btn-primary" onclick="addNotice()">發布公告</button>
+        <div class="admin-note">部署對應：寫入「看板」Google Sheet（公告分頁）→ 同綠能輿情「晉升到主表」概念</div>
+      </div>
+
+      <div class="admin-block">
+        <h3>🗓 新增所務會議</h3>
+        <div class="ab-desc">登記下次所務會議的時間與案由。</div>
+        <div class="admin-field"><label>日期</label><input id="mtDate" type="date"></div>
+        <div class="admin-field"><label>時間</label><input id="mtTime" placeholder="例：14:00–16:00"></div>
+        <div class="admin-field"><label>會議名稱</label><input id="mtTitle" placeholder="例：第 28 次所務會議"></div>
+        <div class="admin-field"><label>案由</label><textarea id="mtAgenda" placeholder="一、… 二、…"></textarea></div>
+        <button class="btn-primary" onclick="addMeeting()">新增會議</button>
+        <div class="admin-note">部署對應：寫入「看板」Google Sheet（會議分頁）</div>
+      </div>
+
+      <div class="admin-block">
+        <h3>🤖 知識庫 / AI 設定</h3>
+        <div class="ab-desc">編輯問答機器人讀取的知識庫摘要，與綠能系統的 KB.md 同概念。</div>
+        <div class="admin-field"><label>知識庫摘要（.md）</label><textarea id="kbEdit" style="min-height:120px;"></textarea></div>
+        <button class="btn-primary" onclick="saveKb()">儲存知識庫</button>
+        <div class="admin-note">部署對應：寫回 Drive 的 KB_DOC_ID（.md）</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- BOTTOM NAV -->
+<div class="botnav">
+  <div class="nav-btn active" data-view="home" onclick="switchView('home')"><span class="ni">🏠</span><span class="nl">首頁</span></div>
+  <div class="nav-btn" data-view="guide" onclick="switchView('guide')"><span class="ni">📁</span><span class="nl">工作指引</span></div>
+  <div class="nav-btn" data-view="quiz" onclick="switchView('quiz')"><span class="ni">⚡</span><span class="nl">快速上手Quiz</span></div>
+  <div class="nav-btn" data-view="ask" onclick="switchView('ask')"><span class="ni">💬</span><span class="nl">問答AI</span></div>
+  <div class="nav-btn" data-view="board" onclick="switchView('board')"><span class="ni">📋</span><span class="nl">公告看板</span></div>
+  <div class="nav-btn" data-view="settings" onclick="switchView('settings')"><span class="ni">⚙️</span><span class="nl">設定</span></div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+/* ═══════ DATA ═══════ */
+const TASKS={
+'30':[
+ {g:'通用底層能力（五組皆適用）',items:[
+  {t:'能說清楚台農院與本所的定位',m:'台農院與農業部、農田水利署的委辦關係；本所五組分工；現行在跑的計畫'},
+  {t:'政府採購基本認知',m:'委辦計畫、服務建議書、期中/期末報告差別；招標、決標、驗收用語'},
+  {t:'公文格式與簽呈撰寫',m:'依範本撰寫正確格式公文／簽呈；了解簽核流程（公文旅程）'},
+  {t:'會議記錄能力（初階）',m:'獨立完成 5–10 人小型會議紀錄，格式正確、決議清楚、按時寄發'},
+  {t:'掌握本所簡報設計語言',m:'閱讀並仿製 3 份本所現有簡報；能依指令增修投影片、保持版面一致'},
+  {t:'內部系統與檔案管理',m:'掌握檔案命名規則、資料夾結構、共享平台；知道找資料去哪裡'},
+ ]},
+ {g:'CHECKPOINT · D30 檢核點',cp:true,items:[
+  {t:'正確說明台農院、本所、所在小組定位與主要委辦機關'},
+  {t:'提交 1 份格式正確的會議記錄（主管抽核）'},
+  {t:'無提示下找到並使用本所檔案系統'},
+  {t:'公文或簡單簽呈格式測試'},
+  {t:'完成安全、保密與利益迴避基本認知確認'},
+ ]},
+],
+'60':[
+ {g:'通用底層能力（五組皆適用）',items:[
+  {t:'能完成指定法規或政策文件摘要',m:'讀指定法規後提 3–5 點政策意涵，可直接用於報告'},
+  {t:'比較研究初階：國內外案例對照',m:'找 2 個以上比較案例，整理成對照表，標示差異與台灣可借鑑之處'},
+  {t:'能獨立撰寫報告章節段落',m:'依計畫書架構完成 1 子項目（約 1000–2000 字）正式報告段落'},
+  {t:'能代表所內聯繫委辦機關（日常事務）',m:'處理計畫日常聯繫；信件用語得宜、不需主管潤稿'},
+  {t:'大型會議籌辦基本能力',m:'協辦一場含外部來賓研討會（場地、通知、議程、簽到、備餐、記錄）'},
+  {t:'AI 輔助研析與初稿能力',m:'用 AI 做資料整理、法規摘要、段落初稿；有 prompt 設計意識'},
+ ]},
+ {g:'CHECKPOINT · D60 檢核點',cp:true,items:[
+  {t:'提交 1 份法規或政策摘要（評：邏輯、格式、準確度）'},
+  {t:'完成 1 次外部聯繫任務（信件或電話）'},
+  {t:'口頭報告：所在小組目前最重要的計畫與工作項目'},
+  {t:'簡報修改能力測試：限時 1 小時修好一份投影片'},
+  {t:'AI 工具使用展示：示範 1 次 AI 輔助研析工作流程'},
+ ]},
+],
+'90':[
+ {g:'通用底層能力（五組皆適用）',items:[
+  {t:'追蹤並管理個人負責任務的進度',m:'用甘特表或任務清單主動回報；卡關時及時提問'},
+  {t:'獨立完成一份期中/期末報告章節',m:'負責完整章節，一次修改後達提交標準'},
+  {t:'能製作可對外呈現的簡報投影片',m:'依指示完成 20 張內報告簡報，版面整潔、重點準確'},
+  {t:'理解計畫政策背景與主要爭點',m:'能向非專業外部訪客說明計畫目的、做法與進展'},
+  {t:'認識其他小組業務、具轉介意識',m:'識別跨組合作機會、主動聯繫；知道問題該轉介給誰'},
+  {t:'建立個人知識管理系統',m:'有自己的資料整理方式，能快速找到 3 個月內接觸的資料'},
+ ]},
+ {g:'CHECKPOINT · D90 檢核點',cp:true,items:[
+  {t:'提交 1 份完整報告章節（直接納入計畫成果）'},
+  {t:'製作 1 份可對外使用的簡報（主管審核後直接使用）'},
+  {t:'口頭：向模擬委辦機關人員說明執行中計畫（5 分鐘）'},
+  {t:'展示個人知識管理系統'},
+  {t:'完成 360 度自我評核表，提交下階段個人學習計畫'},
+ ]},
+],
+};
+
+const TEAMS=[
+ {no:1,name:'公私協力小組',vac:'1 名',role:'跨域協調者，轉譯政策為在地語言；以公私協力與參與式公共設施管理為主要方法，延伸政府施政機能、擴大基礎設施服務網路。',recent:'農業缺工（全國農會外籍移工人力外展調度方案規劃）、農水署擴大灌溉服務基礎建設後期維運機制建立。',tags:['公私協力','參與式管理','在地轉譯']},
+ {no:2,name:'農業綠能小組',vac:'1 名',role:'農業部門綠能政策推動核心幕僚；追蹤監測農業綠能輿情作為決策依據，進行跨國比較研究，持續辦理國際論壇促進政策社會溝通。',recent:'灌溉基礎設施模組化微型水力試驗沙盒計畫、社區服務型微電廠制度設計與創新。',tags:['綠能政策','輿情監測','國際比較']},
+ {no:3,name:'土地管理小組',vac:'1 名',role:'協助公有土地管理機關評估資產活化收益之土地法令適法性；運用比較制度研究、不動產估價、法規檢核與空間大數據進行分析，擬訂公有土地及公共設施管理策略。',recent:'公有土地及公共設施管理策略與制度規劃設計。',tags:['土地法令','不動產估價','空間大數據']},
+ {no:4,name:'綜合業務小組',vac:'2 名',role:'政府會計、預算編審、資產盤點與檔案管理委託專業服務；協助建立業務 SOP 及事業人員人事系統。',recent:'以農田水利事業作業基金及事業人員為核心。',tags:['政府會計','預算編審','SOP']},
+ {no:5,name:'人事制度小組',vac:'1 名',role:'協助推動公部門人事制度規劃與組織再造；設計與優化人事業務作業流程。涵蓋待遇、勞資關係、訓練、敘獎、職能發展、性別平等。',recent:'友善健康職場環境為全新領域。',tags:['人事制度','組織再造','職場友善']},
+];
+
+const GUIDE=[
+ {cat:'請款',icon:'💰',cls:'c-pay',items:[
+  {h:'預請款（要用錢就要做）',b:'最晚 <span class="gi-key">7 個工作日前</span>備妥會議議程等文件，於費用系統申請後印出紙本簽核，交予行政處<b>泓郁</b>。預＝預先＝早點請，遲交就要先墊錢。'},
+  {h:'領款',b:'等泓郁通知領款，確認金額無誤、進行分包。會議時確認<b>核銷用單據</b>（發票、收據）。'},
+  {h:'退補款',b:'活動後於費用系統申請退補款，印出紙本簽核，備妥<b>簽到單、各式單據及餘款</b>交予泓郁。若有差旅費需附差旅單。'},
+  {h:'請購（書籍／軟體／設備）',b:'備妥詳細文件 → 費用系統申請 → 交永碧確認 → 採購（記得拿收據／發票打統編 <b class="mono">50632754</b>）→ 發票交永碧（書籍需複印封面蓋章）。'},
+  {h:'核銷注意',b:'<span class="gi-flag">重要</span>收據<b>不可錯字、塗改</b>。抬頭印章與保管在<b>皓美</b>處。邀請講師／委員需簽領款收據＋簽到單；申報交通費另簽交通費申報單。'},
+  {h:'補助案：便當',b:'<span class="gi-flag">補助案</span>便當金額上限 <span class="gi-key">90 元</span>，僅限與會者、<b>僅一餐</b>。不可有餐盒、飲料。核銷數量／單價／簽到人數須與實際一致。'},
+  {h:'補助案：出席費',b:'出席費 <span class="gi-key">2,500 元/次</span>，同一人同一場會議僅可申請一次。整日活動可拆上、下午各一場＝申請兩次。'},
+  {h:'補助案：照片',b:'核銷須附<b>至少 2 張</b>現場照片，盡量可辨識與會人數。'},
+  {h:'院內 vs 補助案標註',b:'超支時：原則內支出獨立一筆預請款、說明欄<b>用鉛筆</b>註記（補助案）；原則外支出另一筆、註記（院內支出）。'},
+ ]},
+ {cat:'差勤',icon:'🚗',cls:'c-att',items:[
+  {h:'打卡時間（三時段）',b:'08:00前+17:00後／08:30前+17:30後／09:00前+18:00後，<b>一定要在院內打卡</b>。115/1/27 起啟用<b>人臉辨識機</b>。'},
+  {h:'全天假時間',b:'請「全天假」時間統一為 <span class="gi-key">09:00～18:00</span>。'},
+  {h:'請半天假／出差打卡',b:'上半天（08:00–14:00）：早上免打卡，17:00 打下班卡。下半天（11:30–18:00）：離開時簽退，當天不必再進辦公室。顯示「非規定出勤時間」屬正常。'},
+  {h:'加班上限',b:'平日加班 ≤ <b>4 小時</b>、假日 ≤ <b>12 小時</b>、每月 ≤ <b>46 小時</b>。<span class="gi-key">當日請假者不得加班</span>。'},
+  {h:'出差單填報',b:'工作事由＝實際工作時間並詳述去哪、做什麼；預計時程＝含車程（不在辦公室的時間）。'},
+  {h:'搭高鐵／計程車',b:'需<b>提前報告主管</b>並於欄位詳述原因。<span class="gi-key">台中以北盡量借公務車</span>。'},
+  {h:'公務車申請',b:'與他所撞期時瑄晨可協調，請提早申請。時程登記「要拿到車」～「可以還車」的時間。'},
+  {h:'差旅費 vs 預請款',b:'差旅費＝月結（1–31 日）、隔月領、正常流程；預請款＝活動前領、每次結清（走捷徑、不建議）。'},
+ ]},
+ {cat:'會議',icon:'📋',cls:'c-meet',items:[
+  {h:'會議作業五階段',b:'會前籌備 → 物品清單 → 文件 → 會議當日 → 會議紀錄。每月佩穎寄信時預先填報，美編洽<b>王瀞慧 #687、邵仲毅 #686</b>。'},
+  {h:'物品清單',b:'筆電（含轉接頭）、簡報筆、錄音機、桌牌。'},
+  {h:'文件清單',b:'開會通知單、議程、簽到單、會議資料、發言紀錄單、出席費、交通費。院內會議（院長出席）有院內版簽到單格式。'},
+  {h:'會議室申請',b:'選會議室 → 選日期 → 填申請（人數填大概即可）→ 上傳議程。借電腦教室用微軟軟體需先洽<b>旻桓 #685</b>處理授權。'},
+  {h:'設備申借',b:'提前申請；先借自己所、再借行政處、最後其他所。時間登記「拿到設備」～「歸還設備」。'},
+  {h:'公文系統',b:'可在院外登入（記下連結備用）。正式會議需發文／開會通知單時，和承辦確認發文時間、需求、內容。'},
+ ]},
+ {cat:'辦公',icon:'🖨',cls:'c-off',items:[
+  {h:'代接／轉接電話',b:'代接同仁電話：<b class="mono">＊＋9</b>；轉給他人：<b class="mono">保留＋對方分機</b>；外線：按 9~14 線路後撥號（02 區碼可省略）。'},
+  {h:'影印機登入',b:'登入密碼：①<b class="mono">7＋分機</b>（舊）②<b class="mono">分機重複兩次</b>（新）。碳粉於辦公室物品系統申請；影印紙在機旁櫃子，用完順手補充。'},
+  {h:'辦公室物品申請',b:'個人文具、會議用品（原子筆、厚磅紙、名牌夾、掛繩）、耗材（碳粉、紙張）皆於辦公室物品管理系統申請。'},
+  {h:'文件格式',b:'本所常用字體：<b>Times New Roman</b>（英數）＋<b>標楷體</b>。簡報影印：彩印＋加框＋雙面，列印內容設佈局為兩分頁。'},
+  {h:'資料路徑',b:'其他行政事項：<span class="mono">Z:\\02_研究二所\\02_新人專區\\行政作業相關資料</span>'},
+ ]},
+ {cat:'計畫執行',icon:'📐',cls:'c-proj',items:[
+  {h:'計畫五階段',b:'備標 → 評選 → 期中 → 期末 → 驗收。計畫期間＝決標次日起至指定日期。'},
+  {h:'備標／投標／開標',b:'準備服務建議書、編列經費；依時間赴機關交投標文件，隔日開標（攜授權書，記錄投標廠商數與名稱）。'},
+  {h:'議價',b:'攜授權書、身分證、印章（大小章＋個人章）赴機關議價，照院內練習流程與議價金額進行。'},
+  {h:'期初／期中／期末',b:'期初：工作計畫書＋期初審查會議定方向；期中：期中報告書＋審查簡報＋會議；期末：期末報告書＋審查簡報＋會議。'},
+  {h:'印刷送印',b:'三家配合店家：天魁（淡江·自取）、全成（台電大樓·農水署）、宏益（真理大學·外送本院）。不須付錢，收據給<b>皓美</b>。mail 後務必電話確認。'},
+  {h:'郵寄',b:'安泰登峰大樓 1 樓紅樹林郵局辦事處，每日 <b>13:30–15:00</b>。臨櫃匯款需請出差後辦理；可在群組揪同仁共同辦理。'},
+ ]},
+];
+
+const QUIZ=[
+ {cat:'差勤',q:'研二所新人請假連續三日以上，需於幾個工作日前填報申請單？',o:['3','5','7','10'],a:2,e:'連續請假三日以上（如跨假日不得分次申請），需於 7 個工作日前填報。'},
+ {cat:'差勤',q:'平日加班、假日加班、每月加班的上限分別是？',o:['2／8／40 小時','4／12／46 小時','4／10／50 小時','6／12／46 小時'],a:1,e:'平日 ≤4hr、假日 ≤12hr、每月 ≤46hr。'},
+ {cat:'差勤',q:'請「全天假」時，差勤系統登記的統一時間為？',o:['08:00～17:00','08:30～17:30','09:00～18:00','依個人打卡時段'],a:2,e:'全天假時間統一為 09:00～18:00。'},
+ {cat:'差勤',q:'出差交通時間原則上是否認列為加班時數？',o:['是，全部認列','否，不認列','僅認列一半','視主管決定'],a:1,e:'出差交通時間原則上不認列為加班時數。'},
+ {cat:'差勤',q:'台中以北的出差，交通方式原則上應優先？',o:['搭高鐵','借公務車','自行開車','搭客運'],a:1,e:'台中以北請盡量使用公務車；會開車者有機會擔任司機。'},
+ {cat:'差勤',q:'當日有請假的同仁，可以在同一天加班嗎？',o:['可以','不可以','僅可加班 2 小時','需主管同意即可'],a:1,e:'依第 267 次主管會議決議，當日請假者不得加班。'},
+ {cat:'請款',q:'本院的統一編號是？',o:['50632754','50623754','56032754','50632745'],a:0,e:'統一編號 50632754，請款打統編務必正確。'},
+ {cat:'請款',q:'單張收據之金額上限為多少元？',o:['3,000','5,000','10,000','無上限'],a:1,e:'單張收據金額上限為 5,000 元。'},
+ {cat:'請款',q:'申請預請款時，需於會議或活動辦理幾日前將申請單送至行政處？',o:['3 日','5 日','7 日','14 日'],a:2,e:'預請款最晚 7 個工作日前送出，交行政處泓郁。'},
+ {cat:'請款',q:'辦理會議或活動後，退（補）款核銷需於幾日內辦理？',o:['7 日','10 日','14 日','30 日'],a:2,e:'退補款須於 14 日內辦理核銷，並檢附簽到單。'},
+ {cat:'請款',q:'補助案會議便當的金額上限與份數限制為？',o:['90 元、限與會者一餐','100 元、不限餐數','120 元、含飲料','無限制'],a:0,e:'補助案便當上限 90 元，僅限與會者、僅一餐，不可有餐盒飲料。'},
+ {cat:'請款',q:'專家學者出席費的支付標準為每次多少元？',o:['1,500','2,000','2,500','3,000'],a:2,e:'出席費 2,500 元/次，同一人同一場僅可申請一次。'},
+ {cat:'請款',q:'請款時可以將不同廠商、不同會議或活動合併請款嗎？',o:['可以','不可以','金額小於5000可以','同月份可以'],a:1,e:'不可合併；同一場會議相關費用應填於同一張請款單。'},
+ {cat:'請款',q:'核銷時應檢附至少幾張可辨識與會人數的現場照片？',o:['1 張','2 張','3 張','5 張'],a:1,e:'核銷須附至少 2 張現場照片。'},
+ {cat:'安全衛生',q:'大樓發生火災時，逃生應選擇？',o:['電梯','樓梯','原地等待','陽台'],a:1,e:'火災時務必走樓梯，切勿搭電梯。'},
+ {cat:'安全衛生',q:'出差所攜帶之公務設備掉落於明顯危險處（如高處邊坡），可否涉險取回？',o:['可以','不可以','視價值決定','報告主管後可以'],a:1,e:'不可涉險取回；人身安全優先。'},
+ {cat:'安全衛生',q:'每日最後下班的同仁應確認哪些事項？',o:['只要關燈','關燈、關冷氣、確認門窗上鎖','只要鎖門','通知主管'],a:1,e:'關燈、關冷氣（依使用範圍）、機要區及大門上鎖。'},
+ {cat:'辦公',q:'如何代接同仁電話？',o:['按 ＊＋9','按 #＋9','按 0＋分機','直接接起'],a:0,e:'代接同仁電話：先按 ＊ 再按 9。'},
+ {cat:'辦公',q:'要將電話轉接給其他人時，應如何操作？',o:['按 ＊＋對方分機','按 保留＋對方分機','按 0＋對方分機','直接掛斷'],a:1,e:'轉接：先按保留，再按對方分機。'},
+ {cat:'辦公',q:'影印機新版登入密碼的規則為？',o:['7＋分機','分機重複兩次','分機＋0000','員工編號'],a:1,e:'新版：分機重複兩次；舊版：7＋分機。'},
+ {cat:'辦公',q:'本所文件常用字體為？',o:['新細明體＋Arial','標楷體＋Times New Roman','微軟正黑體＋Calibri','標楷體＋Calibri'],a:1,e:'英數用 Times New Roman、中文用標楷體。'},
+ {cat:'機構認識',q:'研二所新人 30 / 60 / 90 日各階段的核心目標依序是？',o:['獨立完成日常／接手計畫片段／成為有效執行成員','學習／實作／領導','觀察／參與／主導','基礎／進階／專家'],a:0,e:'30 獨立完成日常幕僚工作、60 接手計畫片段並理解小組業務、90 成為有效計畫執行成員。'},
+ {cat:'機構認識',q:'二所職涯的三個資歷階段依序是？',o:['助理／專員／經理','研究人員／專案經理或資深研究人員／計畫主持人','實習／正職／主管','新人／老手／元老'],a:1,e:'研究人員 →（具備兩種能力取向）專案經理／資深研究人員 →（三軌整合）計畫主持人。'},
+ {cat:'機構認識',q:'二所職涯的「三種能力取向」A-1／A-2／A-3 分別是？',o:['行政／研究／教學','專案管理／政策領域／業務關係','初級／中級／高級','內勤／外勤／管理'],a:1,e:'A-1 專案管理、A-2 政策領域、A-3 業務關係；具備其中兩種即可晉升下一階段。'},
+ {cat:'機構認識',q:'研二所目前共分為幾個專業小組？',o:['3 個','4 個','5 個','6 個'],a:2,e:'五個：公私協力、農業綠能、土地管理、綜合業務、人事制度。'},
+ {cat:'機構認識',q:'下列何者是「農業綠能小組」近期的新領域？',o:['外籍移工人力外展','模組化微型水力試驗沙盒','公有土地活化','政府會計委外'],a:1,e:'農業綠能小組近期推動灌溉基礎設施模組化微型水力試驗沙盒、社區服務型微電廠制度設計。'},
+ {cat:'機構認識',q:'研二所的核心定位是？',o:['水利工程設計','公共治理與制度創新專業幕僚','農作物育種','水質檢測'],a:1,e:'本所以社會科學為本，專注公共治理與制度創新的專業幕僚服務。'},
+ {cat:'計畫執行',q:'委辦計畫的五個執行階段依序為？',o:['備標→評選→期中→期末→驗收','投標→簽約→執行→結案→驗收','規劃→招標→執行→審查→結案','備標→開標→決標→執行→驗收'],a:0,e:'備標 → 評選 → 期中 → 期末 → 驗收。'},
+];
+
+/* ═══════ STATE ═══════ */
+let taskState={},currentPhase='30',quizSel=new Set(),quizSession=null,curBoard='notice';
+let mockNotices=[
+ {tag:'rule',title:'差勤系統啟用人臉辨識機',body:'自 115/1/27 起，出勤簽到退啟用人臉辨識機；平日加班簽退及假日加班簽到退於系統處理。淡水本院 19F-5、16F-5；分院台北、台中各一處。',date:'115/01/26',urgent:false},
+ {tag:'new',title:'新人培訓 App 上線',body:'本所新人培訓 App 正式啟用，包含 30/60/90 日任務、刷題、工作指引與問答。歡迎多加利用。',date:'115/03/31',urgent:true},
+];
+let mockMeetings=[
+ {date:'2026-05-28',time:'14:00–16:00',title:'115 年 5 月所務會議',agenda:'一、上次會議決議事項追蹤\n二、115 年度計畫執行進度報告\n三、水域型農業綠能設施管制考核計畫服務建議書討論\n四、新人培訓制度與 App 推動\n五、臨時動議'},
+];
+let mockMinutes=[
+ {title:'115 年 4 月所務會議記錄',date:'2026-04-23',size:'PDF · 0.4 MB'},
+ {title:'115 年 3 月所務會議記錄',date:'2026-03-26',size:'PDF · 0.5 MB'},
+];
+let kbText=`# 研二所新人知識庫（摘要）
+## 請款
+- 統編 50632754；單張收據上限 5000；不可合併不同廠商/活動請款
+- 預請款最晚 7 工作日前送泓郁；退補款 14 日內核銷、附簽到單
+- 補助案：便當≤90元僅一餐限與會者、出席費2500/次同場限一次、核銷附≥2張照片
+## 差勤
+- 打卡三時段須院內打卡，115/1/27起人臉辨識；全天假09:00-18:00
+- 加班：平日≤4 假日≤12 月≤46；當日請假不得加班；台中以北盡量借公務車
+## 辦公
+- 代接電話＊+9；轉接 保留+分機；影印機新版 分機重複兩次
+## 二所
+- 五小組：公私協力/農業綠能/土地管理/綜合業務/人事制度
+- 職涯：研究人員→專案經理或資深研究人員（具2種能力取向）→計畫主持人（A1+A2+A3三軌）
+- 能力取向：A-1專案管理 A-2政策領域 A-3業務關係
+## 聯絡
+- 所長吳柏澍、副所長許峻嘉；請購永碧、請款泓郁、差勤嘉真、辦公趙瑜`;
+
+/* ═══════ NAV ═══════ */
+function switchView(v){
+ document.querySelectorAll('.view').forEach(el=>el.classList.remove('active'));
+ document.getElementById('view-'+v).classList.add('active');
+ document.querySelectorAll('.nav-btn').forEach(b=>b.classList.toggle('active',b.dataset.view===v));
+ window.scrollTo(0,0);
+ if(v==='tasks')renderTasks();
+ if(v==='guide')renderGuide();
+ if(v==='quiz')renderQuizHome();
+ if(v==='board')renderBoard();
+ if(v==='intro')renderTeams();
+ if(v==='settings')updateProgress();
+}
+function goTasks(p){currentPhase=p;switchView('tasks');}
+
+/* ═══════ TASKS ═══════ */
+function setTaskPhase(p){currentPhase=p;renderTasks();}
+function renderTasks(){
+ document.querySelectorAll('.pt').forEach(t=>t.classList.toggle('active',t.dataset.phase===currentPhase));
+ const groups=TASKS[currentPhase];let html='';
+ groups.forEach((grp,gi)=>{
+  if(grp.cp){html+=`<div class="checkpoint-banner">🎯 <b>${grp.g}</b> · 每次評核 ≤1 小時，僅確認達標</div>`;}
+  else{html+=`<div class="task-group-title">${grp.g}</div>`;}
+  html+='<div class="task-group">';
+  grp.items.forEach((it,ii)=>{
+   const key=`${currentPhase}-${gi}-${ii}`,done=taskState[key]?'done':'';
+   html+=`<div class="task ${done}" onclick="toggleTask('${key}')"><div class="checkbox"><svg width="12" height="12" viewBox="0 0 12 12"><path d="M2 6l3 3 5-6" stroke="white" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div class="task-body"><div class="task-label">${it.t}</div>${it.m?`<div class="task-meta">${it.m}</div>`:''}</div></div>`;
+  });
+  html+='</div>';
+ });
+ document.getElementById('taskContent').innerHTML=html;
+ updateProgress();
+}
+function toggleTask(key){taskState[key]=!taskState[key];renderTasks();}
+function updateProgress(){
+ let total=0,done=0;
+ Object.keys(TASKS).forEach(p=>TASKS[p].forEach((g,gi)=>g.items.forEach((it,ii)=>{total++;if(taskState[`${p}-${gi}-${ii}`])done++;})));
+ const pct=total?Math.round(done/total*100):0;
+ const ring=document.getElementById('ringFill');if(ring)ring.style.strokeDashoffset=97.4*(1-pct/100);
+ const big=document.getElementById('progBig'),small=document.getElementById('progSmall');
+ if(big){big.textContent=done===0?'尚未開始':`已完成 ${done} / ${total} 項`;small.textContent=pct===100?'全部達標，太強了！':`整體養成進度 ${pct}%`;}
+}
+
+/* ═══════ GUIDE ═══════ */
+function renderGuide(){
+ let html='';
+ GUIDE.forEach((cat,ci)=>{
+  html+=`<div class="guide-cat" data-ci="${ci}"><div class="guide-cat-head" onclick="toggleCat(${ci})"><div class="gc-icon ${cat.cls}">${cat.icon}</div><div class="gc-text"><div class="gc-title">${cat.cat}</div><div class="gc-count">${cat.items.length} 則指引</div></div><div class="gc-arrow">›</div></div><div class="guide-items">`;
+  cat.items.forEach(it=>{html+=`<div class="guide-item"><h4>${it.h}</h4><p>${it.b}</p></div>`;});
+  html+='</div></div>';
+ });
+ document.getElementById('guideContent').innerHTML=html;
+}
+function toggleCat(ci){document.querySelector(`.guide-cat[data-ci="${ci}"]`).classList.toggle('open');}
+function filterGuide(q){
+ q=q.trim().toLowerCase();
+ document.querySelectorAll('.guide-cat').forEach(cat=>{
+  let any=false;
+  cat.querySelectorAll('.guide-item').forEach(it=>{const m=!q||it.textContent.toLowerCase().includes(q);it.style.display=m?'block':'none';if(m)any=true;});
+  cat.style.display=any?'block':'none';
+  if(q&&any)cat.classList.add('open');else if(!q)cat.classList.remove('open');
+ });
+}
+
+/* ═══════ TEAMS ═══════ */
+function renderTeams(){
+ document.getElementById('teamList').innerHTML=TEAMS.map((t,i)=>`<div class="team-card" data-ti="${i}"><div class="team-head" onclick="toggleTeam(${i})"><div class="th-no">${t.no}</div><div class="th-name">${t.name}</div><span class="th-vac">職缺 ${t.vac}</span><span class="th-arrow">›</span></div><div class="team-body"><div class="tb-row">${t.role}</div><div class="tb-row"><b>近期領域：</b>${t.recent}</div><div class="tb-row">${t.tags.map(x=>`<span class="tb-tag">${x}</span>`).join('')}</div></div></div>`).join('');
+}
+function toggleTeam(i){document.querySelector(`.team-card[data-ti="${i}"]`).classList.toggle('open');}
+
+/* ═══════ QUIZ ═══════ */
+function renderQuizHome(){
+ document.getElementById('quizHome').style.display='block';
+ document.getElementById('quizStage').style.display='none';
+ const cats=[...new Set(QUIZ.map(q=>q.cat))];
+ if(quizSel.size===0)cats.forEach(c=>quizSel.add(c));
+ document.getElementById('quizCats').innerHTML=cats.map(c=>`<div class="qcat-chip ${quizSel.has(c)?'on':''}" onclick="toggleQCat('${c}')">${c} <span class="mono">${QUIZ.filter(q=>q.cat===c).length}</span></div>`).join('');
+}
+function toggleQCat(c){if(quizSel.has(c))quizSel.delete(c);else quizSel.add(c);if(quizSel.size===0)quizSel.add(c);renderQuizHome();}
+function startQuiz(scope,mode){
+ let pool=scope==='all'?[...QUIZ]:QUIZ.filter(q=>quizSel.has(q.cat));
+ if(pool.length===0){toast('請至少選一個範圍');return;}
+ pool=shuffle(pool);
+ quizSession={mode,pool,idx:0,score:0,answered:false};
+ switchView('quiz');
+ document.getElementById('quizHome').style.display='none';
+ document.getElementById('quizStage').style.display='block';
+ renderQuestion();
+}
+function renderQuestion(){
+ const s=quizSession,stage=document.getElementById('quizStage');
+ if(s.mode==='exam'&&s.idx>=s.pool.length)return renderResult();
+ const q=s.pool[s.idx];s.answered=false;
+ const total=s.mode==='exam'?s.pool.length:'∞',pct=s.mode==='exam'?(s.idx/s.pool.length*100):0;
+ stage.innerHTML=`<div class="quiz-bar"><div class="quiz-bar-fill" style="width:${pct}%"></div></div><div class="quiz-counter"><span>${s.mode==='exam'?'第 '+(s.idx+1)+' / '+total+' 題':'刷題模式 · 第 '+(s.idx+1)+' 題'}</span><span>答對 ${s.score}</span></div><div class="quiz-q-cat">${q.cat}</div><div class="quiz-q">${q.q}</div><div class="quiz-opts" id="quizOpts">${q.o.map((o,i)=>`<div class="quiz-opt" onclick="answer(${i})"><span class="opt-letter">${'ABCD'[i]}</span><span>${o}</span></div>`).join('')}</div><div class="quiz-explain" id="quizExplain"><b>解析：</b>${q.e}</div><button class="quiz-next" id="quizNext" onclick="nextQuestion()">${s.mode==='exam'&&s.idx===s.pool.length-1?'看結果 →':'下一題 →'}</button>`;
+}
+function answer(i){
+ const s=quizSession;if(s.answered)return;s.answered=true;
+ const q=s.pool[s.idx],opts=document.querySelectorAll('#quizOpts .quiz-opt');
+ opts.forEach((o,oi)=>{o.classList.add('disabled');if(oi===q.a)o.classList.add('correct');if(oi===i&&i!==q.a)o.classList.add('wrong');});
+ if(i===q.a)s.score++;
+ document.getElementById('quizExplain').classList.add('show');
+ document.getElementById('quizNext').classList.add('show');
+}
+function nextQuestion(){
+ const s=quizSession;s.idx++;
+ if(s.mode==='drill'&&s.idx>=s.pool.length){s.pool=shuffle(s.pool);s.idx=0;toast('題庫跑完一輪，重新洗牌繼續！');}
+ renderQuestion();
+}
+function renderResult(){
+ const s=quizSession,pct=Math.round(s.score/s.pool.length*100);
+ let msg=pct>=90?'幾乎全對，你已經準備好了！':pct>=70?'不錯，再刷幾輪就滾瓜爛熟。':pct>=50?'有基礎了，建議回頭看工作指引。':'別氣餒，多刷幾次就會記起來。';
+ document.getElementById('quizStage').innerHTML=`<div class="quiz-result"><div class="qr-score mono">${pct}<span style="font-size:1.3rem;">%</span></div><div class="qr-label">答對 ${s.score} / ${s.pool.length} 題</div><div class="qr-msg">${msg}</div><button class="btn-primary" onclick="startQuiz('selected','exam')">再測一次</button><button class="btn-ghost" onclick="renderQuizHome();document.getElementById('quizStage').style.display='none';">回選單</button></div>`;
+}
+function shuffle(a){a=[...a];for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;}
+
+/* ═══════ ASK ═══════ */
+function autoGrow(el){el.style.height='auto';el.style.height=Math.min(el.scrollHeight,90)+'px';}
+function askKey(e){if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();sendAsk();}}
+function askSuggest(el){document.getElementById('askInput').value=el.textContent;sendAsk();}
+function resetAsk(){
+ document.getElementById('askLog').innerHTML=`<div class="ask-hello" id="askHello"><div class="ah-icon">🤖</div><div class="ah-title">有什麼想問的？</div><div class="ah-sub">行政、請款、差勤、計畫流程…<br>任何不確定的事都可以問。</div><div class="ask-suggest"><div class="ask-sg" onclick="askSuggest(this)">便當一個人最多可以報多少錢？</div><div class="ask-sg" onclick="askSuggest(this)">預請款最晚要幾天前送出？</div><div class="ask-sg" onclick="askSuggest(this)">出差去台中要怎麼安排交通？</div><div class="ask-sg" onclick="askSuggest(this)">研二所有哪幾個小組？</div></div></div>`;
+ document.getElementById('askHomeBtn').classList.remove('show');
+}
+function sendAsk(){
+ const inp=document.getElementById('askInput'),q=inp.value.trim();if(!q)return;
+ const hello=document.getElementById('askHello');if(hello)hello.remove();
+ document.getElementById('askHomeBtn').classList.add('show');
+ const log=document.getElementById('askLog');
+ log.insertAdjacentHTML('beforeend',`<div class="bubble user">${escapeHtml(q)}</div>`);
+ inp.value='';autoGrow(inp);log.scrollTop=log.scrollHeight;
+ log.insertAdjacentHTML('beforeend',`<div class="bubble typing" id="typing"><span class="dot"></span><span class="dot"></span><span class="dot"></span></div>`);
+ log.scrollTop=log.scrollHeight;
+ setTimeout(()=>{
+  const t=document.getElementById('typing');if(t)t.remove();
+  const ans=mockAnswer(q);
+  log.insertAdjacentHTML('beforeend',`<div class="bubble bot">${ans.text}${ans.src?`<div class="src">📎 來源：${ans.src}</div>`:''}</div>`);
+  log.scrollTop=log.scrollHeight;
+ },900);
+}
+function mockAnswer(q){
+ const ql=q.toLowerCase();
+ const kb=[
+  {k:['便當','餐費','吃的','餐盒'],t:'補助案的便當金額上限是 <b>90 元</b>，僅限與會者、<b>只能一餐</b>，不可有餐盒或飲料。核銷時數量、單價要和簽到人數一致。',s:'辦理指引 · 補助案請款'},
+  {k:['預請款','幾天','7','請款送'],t:'預請款最晚要在會議或活動辦理 <b>7 個工作日前</b>，於費用系統申請後印出紙本簽核，交給行政處<b>泓郁</b>。',s:'辦理指引 · 請款'},
+  {k:['退補款','核銷','14'],t:'活動後的退補款核銷須在 <b>14 日內</b>辦理，要備妥簽到單、各式單據及餘款交給泓郁；有差旅費要附差旅單。',s:'辦理指引 · 請款'},
+  {k:['出席費','講師','委員'],t:'出席費標準是 <b>2,500 元/次</b>，同一人在同一場會議只能申請一次。整日活動可拆成上、下午各一場，就能申請兩次。',s:'辦理指引 · 補助案請款'},
+  {k:['台中','出差','高鐵','公務車','交通'],t:'台中以北的出差請<b>盡量借公務車</b>（會開車者可能當司機）。若真的要搭高鐵／計程車，需<b>提前報告主管</b>並在出差單欄位詳述原因。公務車撞期時可請瑄晨協調，記得提早申請。',s:'辦理指引 · 差勤'},
+  {k:['電話','代接','轉接','分機'],t:'代接同仁電話：按 <b>＊＋9</b>；轉接給其他人：按 <b>保留＋對方分機</b>；打外線：按 9~14 線路後撥號（02 區碼可省略）。',s:'辦理指引 · 辦公'},
+  {k:['影印','列印','密碼'],t:'影印機登入密碼：舊版是 <b>7＋分機</b>，新版是 <b>分機重複兩次</b>。碳粉在辦公室物品系統申請，影印紙在機器旁櫃子，用完請順手補充。',s:'辦理指引 · 辦公'},
+  {k:['打卡','上班','下班','人臉'],t:'打卡有三個時段（08:00／08:30／09:00 前上班，對應 17:00／17:30／18:00 後下班），<b>一定要在院內打卡</b>。115/1/27 起啟用人臉辨識機。全天假時間統一為 09:00～18:00。',s:'辦理指引 · 差勤'},
+  {k:['加班','幾小時','上限'],t:'加班上限：平日 ≤ <b>4 小時</b>、假日 ≤ <b>12 小時</b>、每月 ≤ <b>46 小時</b>。注意：當日有請假就不能加班。',s:'考題範本 · 差勤'},
+  {k:['統編','統一編號'],t:'本院統一編號是 <b>50632754</b>，請款拿發票時記得打統編。',s:'辦理指引'},
+  {k:['小組','幾組','五組','哪些組','部門'],t:'研二所共有 <b>五個專業小組</b>：①公私協力 ②農業綠能 ③土地管理 ④綜合業務 ⑤人事制度。詳細可看「研究院與二所介紹」頁。',s:'二所介紹'},
+  {k:['職涯','升遷','晉升','路徑','成長'],t:'二所職涯有三個資歷階段：<b>研究人員 → 專案經理／資深研究人員 → 計畫主持人</b>。背後是三種能力取向（A-1 專案管理、A-2 政策領域、A-3 業務關係），具備其中兩種就能晉升下一階段。詳見「二所職涯路徑」頁。',s:'二所職涯路徑'},
+  {k:['30','60','90','養成','任務'],t:'新人路徑分三階段：<b>D30</b> 獨立完成日常幕僚工作、<b>D60</b> 接手計畫片段並理解小組業務、<b>D90</b> 成為有效計畫執行成員。每階段結束有一次檢核點。',s:'二所人才養成路徑'},
+  {k:['簽核','所長','主管','誰簽'],t:'差勤與請款由<b>所長吳柏澍</b>簽核（公文／費用／差勤／請款），請款也可由<b>副所長許峻嘉</b>簽核。',s:'辦理指引 · 主管簡介'},
+ ];
+ for(const e of kb){if(e.k.some(k=>ql.includes(k.toLowerCase())))return{text:e.t,src:e.s};}
+ return{text:'這題我在目前的知識庫裡沒有找到明確答案。部署後，正式版會由 Sonnet 讀取完整知識庫（辦理指引＋路徑圖＋二所介紹＋你上傳的教材）來回答；你也可以到「設定 → 資訊更新」補充內容。要不要先到「工作指引」查查看？',src:null};
+}
+function escapeHtml(s){return s.replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));}
+
+/* ═══════ BOARD ═══════ */
+function setBoard(b){curBoard=b;document.querySelectorAll('.bt').forEach(t=>t.classList.toggle('active',t.dataset.board===b));renderBoard();}
+function renderBoard(){
+ let html='';
+ if(curBoard==='notice'){
+  const tn={new:'最新',rule:'新規定',info:'資訊'};
+  html=mockNotices.map(n=>`<div class="notice ${n.urgent?'urgent':''}"><div class="notice-head"><span class="notice-tag ${n.tag}">${tn[n.tag]}</span><span class="notice-date">${n.date}</span></div><div class="notice-title">${n.title}</div><div class="notice-body">${n.body.replace(/\n/g,'<br>')}</div></div>`).join('');
+ }else if(curBoard==='meeting'){
+  html=mockMeetings.map(m=>{const d=new Date(m.date);return `<div class="meeting"><div class="meeting-date"><div class="md-day mono">${d.getDate()}</div><div class="md-mon">${d.getFullYear()-1911} 年 ${d.getMonth()+1} 月</div></div><div class="meeting-info"><div class="mi-title">${m.title}</div><div class="mi-time">${m.time}</div><div class="mi-agenda">${m.agenda.replace(/\n/g,'<br>')}</div></div></div>`;}).join('');
+ }else{
+  html=mockMinutes.map(m=>`<div class="minutes-item" onclick="toast('預覽版：部署後可開啟 PDF')"><span class="min-icon">📄</span><div class="min-text"><div class="min-title">${m.title}</div><div class="min-meta">${m.date.replace(/-/g,'/')} · ${m.size}</div></div><span class="min-dl">⬇</span></div>`).join('');
+ }
+ document.getElementById('boardContent').innerHTML=html;
+}
+
+/* ═══════ ADMIN ═══════ */
+function openAdmin(){switchView('admin');document.getElementById('adminLock').style.display='block';document.getElementById('adminPanel').style.display='none';document.getElementById('adminPw').value='';}
+function checkAdmin(){const pw=document.getElementById('adminPw').value;if(pw==='2sogogo'){document.getElementById('adminLock').style.display='none';document.getElementById('adminPanel').style.display='block';document.getElementById('kbEdit').value=kbText;}else{toast('密碼錯誤');}}
+function logoutAdmin(){switchView('settings');}
+function mockUpload(inp){const f=inp.files[0];if(!f)return;document.getElementById('matList').innerHTML+=`<div class="file-chip">📄 ${f.name} <span style="color:var(--ink-faint)">（預覽版未實際上傳）</span><span class="fc-x" onclick="this.parentElement.remove()">✕</span></div>`;toast('預覽版：部署後會寫入 Drive 知識庫');}
+function addNotice(){const tag=document.getElementById('ntTag').value,title=document.getElementById('ntTitle').value.trim(),body=document.getElementById('ntBody').value.trim();if(!title){toast('請輸入標題');return;}const d=new Date(),date=`${d.getFullYear()-1911}/${String(d.getMonth()+1).padStart(2,'0')}/${String(d.getDate()).padStart(2,'0')}`;mockNotices.unshift({tag,title,body,date,urgent:tag==='new'});document.getElementById('ntTitle').value='';document.getElementById('ntBody').value='';toast('公告已發布（預覽版存於記憶體）');}
+function addMeeting(){const date=document.getElementById('mtDate').value,time=document.getElementById('mtTime').value.trim(),title=document.getElementById('mtTitle').value.trim(),agenda=document.getElementById('mtAgenda').value.trim();if(!date||!title){toast('請填日期與名稱');return;}mockMeetings.push({date,time,title,agenda});mockMeetings.sort((a,b)=>b.date.localeCompare(a.date));document.getElementById('mtTitle').value='';document.getElementById('mtAgenda').value='';toast('會議已新增（預覽版存於記憶體）');}
+function saveKb(){kbText=document.getElementById('kbEdit').value;toast('知識庫已儲存（預覽版存於記憶體）');}
+
+/* ═══════ UTIL ═══════ */
+let toastTimer;
+function toast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');clearTimeout(toastTimer);toastTimer=setTimeout(()=>t.classList.remove('show'),2200);}
+
+/* INIT */
+renderTasks();renderGuide();renderQuizHome();renderTeams();
+</script>
+</body>
+</html>
